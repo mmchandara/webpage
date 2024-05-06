@@ -5,6 +5,7 @@ import CartPage from './CartPage';
 import CheckoutPage from './CheckoutPage';
 import axios from 'axios';
 import Login from './Login';
+import CreateUser from './CreateUser';
 
 const App = () => {
   const [cart, setCart] = useState([]);
@@ -59,6 +60,7 @@ const App = () => {
   };
 
   return (
+    <div className="home-container">
     <Router>
       <div>
         <nav>
@@ -74,7 +76,7 @@ const App = () => {
             </li>
             {isLoggedIn ? (
               <li>
-                <span>Welcome, {currentUser}</span>
+                <span>Welcome, {currentUser.username}</span>
                 <button onClick={handleLogout}>Logout</button>
               </li>
             ) : (
@@ -89,10 +91,12 @@ const App = () => {
           <Route path="/" element={<Home products={products} addToCart={addToCart} />} />
           <Route path="/cart" element={<CartPage cart={cart} updateQuantity={updateQuantity} removeFromCart={removeFromCart} handleCheckout={handleCheckout} />} />
           <Route path="/checkout" element={<CheckoutPage cart={cart} currentUser={currentUser} />} />
-          <Route path="/login" element= {<Login onLogin={handleLogin}/>} />
+          <Route path="/login" element= {<Login onLogin={handleLogin} setCurrentUser={setCurrentUser} />} />
+          <Route path="/create-user" element={<CreateUser />} />
         </Routes>
       </div>
     </Router>
+    </div>
   );
 };
 

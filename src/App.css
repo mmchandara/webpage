@@ -6,14 +6,26 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; 
+  min-height: 100vh;
+  background-image: url('https://picsum.photos/5000');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .container {
   max-width: 1200px;
   padding: 20px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
-
+.home-container {
+  background-color: rgba(255, 255, 255, 0.8); /* Background color with opacity */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for a nice effect */
+}
 /* Navigation bar */
 nav ul {
   list-style-type: none;

@@ -1,13 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const CheckoutPage = ({ cart, currentUser }) => {
   const [formData, setFormData] = useState({
-    name: currentUser.name || '',
-    email: currentUser.email || '',
-    address: currentUser.address || '',
+    username: '',
+    email: '',
+    address: '',
     paymentMethod: 'debit'
   });
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/users', {
+          headers: {
+            Authorization: `Bearer ${currentUser.token}`
+          }
+        });
+        const userData = response.data;
+        setFormData({
+          username: userData.username,
+          email: userData.email,
+          address: userData.address,
+          paymentMethod: 'debit'
+        });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    if (currentUser) {
+      fetchUserData();
+    }
+  }, [currentUser]);
+  useEffect(() => {
+    // Calculate total price when cart changes
+    const calculateTotalPrice = () => {
+      let total = 0;
+      cart.forEach(item => {
+        total += item.price * item.quantity;
+      });
+      setTotalPrice(total);
+    };
+    calculateTotalPrice(); 
+  }, [cart]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -38,6 +77,9 @@ const CheckoutPage = ({ cart, currentUser }) => {
         ) : (
           <p>Your cart is empty.</p>
         )}
+      </div>
+      <div>
+        <h3>Total Price: ${totalPrice.toFixed(2)}</h3>
       </div>
       <form onSubmit={handleSubmit}>
         <div>
@@ -72,6 +114,7 @@ const CheckoutPage = ({ cart, currentUser }) => {
                 <h4>{item.product_name}</h4>
                 <p>Price: ${item.price}</p>
                 <p>Quantity: {item.quantity}</p>
+                <p>Total Price: ${totalPrice.toFixed(2)}</p>
               </li>
             ))}
           </ul>
